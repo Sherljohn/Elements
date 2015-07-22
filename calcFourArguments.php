@@ -7,7 +7,7 @@
 
 // 合金中可能的元素的映射
 $elementsMapping = array(
-	'Li' => 1,   'Be' => 2,  ' B'  => 3,   'C'  => 4,   'N'  => 5,   'Na' => 6,   'Mg' => 7,   'Al' => 8,   'Si' => 9,   'P'  => 10,
+	'Li' => 1,   'Be' => 2,   'B'  => 3,   'C'  => 4,   'N'  => 5,   'Na' => 6,   'Mg' => 7,   'Al' => 8,   'Si' => 9,   'P'  => 10,
 	'K'  => 11,  'Ca' => 12,  'Sc' => 13,  'Ti' => 14,  'V'  => 15,  'Cr' => 16,  'Mn' => 17,  'Fe' => 18,  'Co' => 19,  'Ni' => 20,
 	'Cu' => 21,  'Zn' => 22,  'Ga' => 23,  'Ge' => 24,  'Rb' => 25,  'Sr' => 26,  'Y'  => 27,  'Zr' => 28,  'Nb' => 29,  'Mo' => 30,
 	'Tc' => 31,  'Ru' => 32,  'Rh' => 33,  'Pd' => 34,  'Ag' => 35,  'Cd' => 36,  'In' => 37,  'Sn' => 38,  'Cs' => 39,  'Ba' => 40,
@@ -4782,15 +4782,48 @@ if ( !empty($_POST['element']) && !empty($_POST['number']) ) {
 	
 	
 	//======================== detalHmix =================================
-	$detaHmix = 0;
+	$detalHmix = 0;
 	for($i=0; $i<count($numbersArr)-1; $i++){
 		for ($j=$i+1; $j<count($numbersArr);$j++){
-			$detaHmix += $C[$i] * $C[$j] * 4 * $deltaH[$maps[$i]][$maps[$j]];
+			$detalHmix += $C[$i] * $C[$j] * 4 * $deltaH[$maps[$i]][$maps[$j]];
 		}
 	}
 	
-	echo "<p style='color:blue'>The value of <b>DeltaHmix</b> is $detaHmix </p>";
+	echo "<p style='color:blue'>The value of <b>DeltaHmix</b> is $detalHmix </p>";
 	//======================== detalHmix =================================
+	
+	
+	
+	//======================== gma =================================
+	
+	// 各原子的平均半径
+	$averageR = 0;
+	for ($i=0; $i<count($maps); $i++) {
+	    $averageR += $C[$i] * $radium[$maps[$i]];
+	}
+	
+	//每种元素的原子半径
+	for ($i=0; $i<count($maps); $i++) {
+	    $elementsRadium[] = $radium[$maps[$i]];
+	}
+	
+	//对原子半径进行排序，获取最小的原子半径和最大的原子半径
+	sort($elementsRadium);
+	$rs = $elementsRadium[0];
+	$rl = $elementsRadium[count($elementsRadium)-1];
+	
+	
+	//计算ws的值
+	$ws = (pow(($rl+$averageR), 2) - pow($averageR, 2)) / pow(($rl+$averageR), 2);
+	$ws = 1 - sqrt($ws);
+	
+	//计算wl的值
+	$wl = (pow(($rs+$averageR), 2) - pow($averageR, 2)) / pow(($rs+$averageR), 2);
+	$wl = 1 - sqrt($wl);
+	
+	$gma = $wl/$ws;
+	echo "<p style='color:red'>The value of Gma is $gma </p>";
+	//======================== gma =================================
 	
 	
 	
@@ -4807,7 +4840,7 @@ if ( !empty($_POST['element']) && !empty($_POST['number']) ) {
 	$R = -8.314;
 	$deltaS = $R * $deltaS;
 	
-	$Omega = $Tm * $deltaS / abs($detaHmix);
+	$Omega = $Tm * $deltaS / abs($detalHmix);
 	echo "<p style='color:blue'>The value of <b>Oemga</b> is $Omega </p><br/>";
 	//======================== Omega =================================
 }
