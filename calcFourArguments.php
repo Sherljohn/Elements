@@ -4840,7 +4840,12 @@ if ( !empty($_POST['element']) && !empty($_POST['number']) ) {
 	$R = -8.314;
 	$deltaS = $R * $deltaS;
 	
-	$Omega = $Tm * $deltaS / abs($detalHmix);
+	if (abs($detalHmix)) {
+		$Omega = $Tm * $deltaS / abs($detalHmix) / 1000;
+	} else {
+		$Omega = -99999999;
+	}
+	
 	echo "<p style='color:blue'>The value of <b>Oemga</b> is $Omega </p><br/>";
 	//======================== Omega =================================
 }

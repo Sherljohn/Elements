@@ -1,4 +1,5 @@
 <?php
+ini_set('max_execution_time', 0);
 
 // 合金中可能的元素的映射
 include './data/elementsMapping.php';
@@ -598,7 +599,11 @@ function getOmega($elements, $numbers, $meltingPoint, $deltaHmix) {
     $R = -8.314;
     $deltaS = $R * $deltaS;
     
-    $Omega = $Tm * $deltaS / abs($deltaHmix);
+    if (abs($deltaHmix)) {
+    	$Omega = ($Tm * $deltaS / abs($deltaHmix)) / 1000;
+    } else {
+    	return -99999999;
+    }
 
     return $Omega;
 }
@@ -625,7 +630,7 @@ function getOmega($elements, $numbers, $meltingPoint, $deltaHmix) {
             ~
             <input type="text" name="maxDeltaH" style="width:200px;height:30px"><br/><br/>
             
-             The the range of Gma:<br/>
+             The the range of Gamma:<br/>
             <input type="text" name="minGma" style="width:200px;height:30px">
             ~
             <input type="text" name="maxGma" style="width:200px;height:30px"><br/><br/>
