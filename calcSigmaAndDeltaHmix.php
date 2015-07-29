@@ -1,6 +1,6 @@
 <?php
 /**
- * 在给定的67种元素中，任意输入几种元素及其对应的原子个数，计算Omega参数的值
+ * 在给定的67种元素中，任意输入几种元素及其对应的原子个数，计算Sigma和Delta参数的值，并在同一界面展示出来
  */
 
 
@@ -11,11 +11,8 @@ include './data/elementsMappingReverse.php';
 // 各元素对应的原子半径
 include './data/radium.php';
 
-// 各元素对应的熔点
-include './data/meltingPoint.php';
-
 // 各元素两两之间的混合焓
-include './data/deltaH.php';	
+include './data/deltaH.php';
 
 
 if ( !empty($_POST['element']) && !empty($_POST['number']) ) {
@@ -74,65 +71,8 @@ if ( !empty($_POST['element']) && !empty($_POST['number']) ) {
 		}
 	}
 	
-	echo "<p style='color:blue'>The value of <b>DeltaHmix</b> is $deltaHmix </p>";
+	echo "<p style='color:blue'>The value of <b>DeltaHmix</b> is $deltaHmix </p><br/>";
 	//======================== deltaHmix =================================
-	
-	
-	
-	//======================== gma =================================
-	
-	// 各原子的平均半径
-	$averageR = 0;
-	for ($i=0; $i<count($maps); $i++) {
-	    $averageR += $C[$i] * $radium[$maps[$i]];
-	}
-	
-	//每种元素的原子半径
-	for ($i=0; $i<count($maps); $i++) {
-	    $elementsRadium[] = $radium[$maps[$i]];
-	}
-	
-	//对原子半径进行排序，获取最小的原子半径和最大的原子半径
-	sort($elementsRadium);
-	$rs = $elementsRadium[0];
-	$rl = $elementsRadium[count($elementsRadium)-1];
-	
-	
-	//计算ws的值
-	$ws = (pow(($rl+$averageR), 2) - pow($averageR, 2)) / pow(($rl+$averageR), 2);
-	$ws = 1 - sqrt($ws);
-	
-	//计算wl的值
-	$wl = (pow(($rs+$averageR), 2) - pow($averageR, 2)) / pow(($rs+$averageR), 2);
-	$wl = 1 - sqrt($wl);
-	
-	$gma = $wl/$ws;
-	echo "<p style='color:red'>The value of Gma is $gma </p>";
-	//======================== gma =================================
-	
-	
-	
-	//======================== Omega =================================
-	$Tm = 0;
-	for ($i=0; $i<count($maps); $i++) {
-	    $Tm += $C[$i] * $meltingPoint[$maps[$i]];
-	}
-	
-	$deltaS = 0;
-	for ($i=0; $i<count($maps); $i++) {
-	    $deltaS += $C[$i] * log($C[$i]);
-	}
-	$R = -8.314;
-	$deltaS = $R * $deltaS;
-	
-	if (abs($deltaHmix)) {
-		$Omega = $Tm * $deltaS / abs($deltaHmix) / 1000;
-	} else {
-		$Omega = -99999999;
-	}
-	
-	echo "<p style='color:blue'>The value of <b>Oemga</b> is $Omega </p><br/>";
-	//======================== Omega =================================
 }
 
 

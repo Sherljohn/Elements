@@ -430,7 +430,7 @@ if ($number!='' && $minSigma!='' && $maxSigma!='' && $minDeltaH!='' && $maxDelta
  * @param array $elements
  * @param arary $numbers
  * @param array $deltaH
- * @return float detalHmix
+ * @return float deltaHmix
  *
  * @author Sherljohn
  * @date 2015-3-7
@@ -468,7 +468,7 @@ function getDeltaHmix($elements, $numbers, $deltaH) {
  * @param array $elements
  * @param array $numbers
  * @param array $radium
- * @return float detalHmix
+ * @return float sigma
  *
  * @author Sherljohn
  * @date 2015-3-7
@@ -510,7 +510,7 @@ function getSigma($elements, $numbers, $radium) {
  * @param array $elements
  * @param array $numbers
  * @param array $radium
- * @return float detalHmix
+ * @return float gma
  *
  * @author Sherljohn
  * @date 2015-3-7

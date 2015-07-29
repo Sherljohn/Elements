@@ -1,21 +1,5 @@
-<?php
-/**
- * 在给定的73种元素中，任意输入几种元素及其对应的原子个数，计算Delta参数的值
- */
-
-
-
-    $mapping = array (
-         'H' => 1,  'Li' => 2, 'Be' => 3, 'B' => 4, 'C' => 5, 'N' => 6, 'Na' => 7, 'Mg' => 8, 'Al' => 9, 'Si' => 10,
-         'P' => 11,  'K' => 12, 'Ca' => 13, 'Sc' => 14, 'Ti' => 15, 'V' => 16, 'Cr' => 17, 'Mn' => 18, 'Fe' => 19, 'Co' => 20,
-        'Ni' => 21, 'Cu' => 22, 'Zn' => 23, 'Ga' => 24, 'Ge' => 25, 'As' => 26, 'Rb' => 27, 'Sr' => 28, 'Y' => 29, 'Zr' => 30,
-        'Nb' => 31, 'Mo' => 32, 'Tc' => 33, 'Ru' => 34, 'Rh' => 35, 'Pd' => 36, 'Ag' => 37, 'Cd' => 38, 'In' => 39, 'Sn' => 40,
-        'Sb' => 41, 'Cs' => 42, 'Ba' => 43, 'La' => 44, 'Ce' => 45, 'Pr' => 46, 'Nd' => 47, 'Pm' => 48, 'Sm' => 49, 'Eu' => 50,
-        'Gd' => 51, 'Tb' => 52, 'Dy' => 53, 'Ho' => 54, 'Er' => 55, 'Tm' => 56, 'Yb' => 57, 'Lu' => 58, 'Hf' => 59, 'Ta' => 60,
-         'W' => 61, 'Re' => 62, 'Os' => 63, 'Ir' => 64, 'Pt' => 65, 'Au' => 66, 'Hg' => 67, 'Tl' => 68, 'Pb' => 69, 'Bi' => 70,
-        'Th' => 71,  'U' => 72, 'Pu' => 73);
-	
-	$detaHmix = array (
+<?php 
+$deltaH = array (
       1 => 
       array (
         1 => '999',
@@ -5565,59 +5549,3 @@
         73 => '999',
       )
     );
-
-    if ( !empty($_POST['element']) && !empty($_POST['number']) ) {
-        $elementsArr = explode(',', trim($_POST['element'],','));
-        $numbersArr = explode(',', trim($_POST['number'],','));
-
-        if (count($elementsArr) != count($numbersArr)) {
-            echo "Error input, please try again!";
-            header('Location:');
-            exit;
-        }
-
-        foreach ($elementsArr as $key => $value) {
-            $elementsArr[$key] = trim($value);
-        }
-        foreach ($numbersArr as $key => $value) {
-            $numbersArr[$key] = trim($value);
-        }
-        
-        foreach ($elementsArr as $value){
-        	$maps[] = $mapping[$value];
-        }
-                
-        $total = array_sum($numbersArr);
-        
-        foreach ($numbersArr as $value){
-        	$C[] = $value/$total;
-        }
-        
-        $detaH = 0;
-        for($i=0; $i<count($numbersArr)-1; $i++){
-        	for ($j=$i+1; $j<count($numbersArr);$j++){
-        		$detaH += $C[$i] * $C[$j] * 4 * $detaHmix[$maps[$i]][$maps[$j]];
-        	}        	
-        }
-        
-        echo "<p style='color:red'>The value is $detaH </p><br/>";
-    }
-?>
-
-
-<html>
-	<body>
-		<form name="input" method="post" >
-			Input the elements consist of the alloy(separated by commas):<br/>
-			For example:<br/>
-			Na, Mg, Al, Au, Ag, Cu<br/>
-			<input type="text" name="element" style="width:500px;height:30px"><br/><br/>
-			Input the number of each kind of elements(separated by commas):<br/>
-			For example:<br/>
-			1, 2, 1, 1, 1, 1<br/>
-			<input type="text" name="number"style="width:500px;height:30px"><br/><br/>
-			<input type="submit" value="Submit" />
-		</form>
-	</body>
-
-</html>
