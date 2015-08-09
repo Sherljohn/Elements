@@ -1,16 +1,16 @@
 <?php
 /**
- * 在给定的73种元素中，任意输入几种元素及其对应的原子个数，计算Alpha参数的值
+ * 在给定的67种元素中，任意输入几种元素及其对应的原子个数，计算Alpha参数的值
  */
 
 
 
-include './data/elementsMappingReverse73.php';
-include './data/deltaH73.php';	
+include './data/elementsMappingReverse.php';
+include './data/radium.php';
 
     if ( !empty($_POST['element']) && !empty($_POST['number']) ) {
-        $elementsArr = explode(',', trim($_POST['element'],','));
-        $numbersArr = explode(',', trim($_POST['number'],','));
+        $elementsArr = explode(',', trim($_POST['element'],','));   // 接收输入的元素并转化为数组
+        $numbersArr  = explode(',', trim($_POST['number'],','));    // 接收输入的元素个数并转化为数组
 
         if (count($elementsArr) != count($numbersArr)) {
             echo "Error input, please try again!";
@@ -18,31 +18,40 @@ include './data/deltaH73.php';
             exit;
         }
 
+        // 删除对于的空格
         foreach ($elementsArr as $key => $value) {
             $elementsArr[$key] = trim($value);
         }
         foreach ($numbersArr as $key => $value) {
             $numbersArr[$key] = trim($value);
         }
-        
+
+        // 把元素转化为对应的数字表示(67个数组分别代表67种不同的元素，一一对应)
         foreach ($elementsArr as $value){
         	$maps[] = $elementsMapping[$value];
         }
-                
+
+        // 计算每种元素的原子百分比
         $total = array_sum($numbersArr);
-        
         foreach ($numbersArr as $value){
         	$C[] = $value/$total;
         }
-        
-        $deltaHmix = 0;
-        for($i=0; $i<count($numbersArr)-1; $i++){
-        	for ($j=$i+1; $j<count($numbersArr);$j++){
-        		$detalHmix += $C[$i] * $C[$j] * 4 * $deltaH[$maps[$i]][$maps[$j]];
+
+        // 计算平均半径
+        $averageR = 0;
+        for ($i=0; $i<count($maps); $i++) {
+            $averageR += $C[$i] * $radium[$maps[$i]];
+        }
+        $doubleAverageR = 2 * $averageR;
+
+        $alpha = 0;
+        for($i=0; $i<count($numbersArr); $i++){
+        	for ($j=$i; $j<count($numbersArr); $j++){
+                $alpha += ($C[$i] * $C[$j] * abs($radium[$maps[$i]] + $radium[$maps[$j]] - $doubleAverageR))/$doubleAverageR;
         	}        	
         }
         
-        echo "<p style='color:red'>The value is $deltaHmix </p><br/>";
+        echo "<p style='color:red'>The value is $alpha </p><br/>";
     }
 ?>
 
